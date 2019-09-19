@@ -1,0 +1,17 @@
+.nav {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.home {
+    padding: 0 !important;
+}
+
+.home .upper-fold {
+    height: 100vh !important;
+    background-size: cover;
+    background-image: url('./giraffe.jpeg');
+    /* margin-top: -84px; */
+}
