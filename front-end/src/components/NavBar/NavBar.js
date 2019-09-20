@@ -9,12 +9,14 @@ class NavBar extends Component {
     }
 
     signUp = (e) => {
+        document.querySelector('body').classList += 'body-modal-show';
         this.setState({
             showModal: true
         })
     }
-
+    
     closeModal = (e) => {
+        document.querySelector('body').classList = '';
         this.setState({
             showModal: false
         })
