@@ -9,7 +9,7 @@ class NavBar extends Component {
     }
 
     signUp = (e) => {
-        document.querySelector('body').classList += 'body-modal-show';
+        document.querySelector('body').classList = 'body-modal-show';
         this.setState({
             showModal: true
         })
@@ -48,6 +48,10 @@ class NavBar extends Component {
                 <div className='login-modal' style={this.state.showModal ?  {'display': 'block'}: {}}>
                     <button className='close-modal' onClick={this.closeModal}>x</button>
                     <h1>Modal</h1>
+                    <button className='sign-up-buttons' type='submit'>Continue with Facebook</button>
+                    <button className='sign-up-buttons' type='submit'>Continue with Google</button>
+                    <hr/>
+                    <button className='sign-up-buttons' type='submit'>Sign up with Email</button>
                 </div>
             </div>
         );
