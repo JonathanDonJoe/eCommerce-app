@@ -40,6 +40,7 @@ class SignUp extends Component {
     }
 
     render() {
+        console.log(this.props.auth)
         return (
             <div className="register-form">
                 <form onSubmit={this.submitSignup}>
@@ -62,4 +63,10 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(SignUp);
+function mapStateToProps(state) {
+    return ( {
+        auth: state.auth
+    })
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
