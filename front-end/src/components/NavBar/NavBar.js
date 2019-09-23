@@ -1,11 +1,33 @@
 import React, { Component } from 'react';
 import './NavBar.css';
 import { Link } from 'react-router-dom';
+import ModalSplash from './ModalSplash';
+import Login from './Login';
+import SignUp from './SignUp';
 
 class NavBar extends Component {
 
     state = {
-        showModal: false
+        showModal: false,
+        modalContent: <ModalSplash />
+    }
+
+    componentDidMount() {
+        this.setState( {
+            modalContent: <ModalSplash changeModalContent={this.changeModalContent} />
+        })
+    }
+
+    changeModalContent = (newContent) => {
+        let modalContent = <ModalSplash changeModalContent={this.changeModalContent} />
+        if (newContent === 'login') {
+            modalContent= <Login changeModalContent={this.changeModalContent} />
+        } else if (newContent === 'signup') {
+            modalContent= <SignUp changeModalContent={this.changeModalContent} />
+        }
+        this.setState( {
+            modalContent
+        })
     }
 
     signUp = (e) => {
@@ -13,6 +35,15 @@ class NavBar extends Component {
         this.setState({
             showModal: true
         })
+        this.changeModalContent('signup');
+    }
+
+    login = (e) => {
+        document.querySelector('body').classList = 'body-modal-show';
+        this.setState({
+            showModal: true
+        })
+        this.changeModalContent('login');
     }
     
     closeModal = (e) => {
@@ -37,7 +68,7 @@ class NavBar extends Component {
                                     {/* <Link to='/sign-up'>Sign Up</Link> */}
                                     Sign Up
                                 </li>
-                                <li className='nav-non-link' onClick={this.signUp}>
+                                <li className='nav-non-link' onClick={this.login}>
                                     {/* <Link to='/log-in'>Log In</Link> */}
                                     Log In
                                 </li>
@@ -45,13 +76,11 @@ class NavBar extends Component {
                         </div>
                     </nav>
                 </div>
-                <div className='login-modal' style={this.state.showModal ?  {'display': 'block'}: {}}>
-                    <button className='close-modal' onClick={this.closeModal}>x</button>
-                    <h1>Modal</h1>
-                    <button className='sign-up-buttons' type='submit'>Continue with Facebook</button>
-                    <button className='sign-up-buttons' type='submit'>Continue with Google</button>
-                    <hr/>
-                    <button className='sign-up-buttons' type='submit'>Sign up with Email</button>
+                <div className="login-modal" style={this.state.showModal ? {"display": "block"} : {}} >
+                    <button id="close-modal" onClick={this.closeModal}>&Chi;</button>
+                    <div className="modal-content">
+                        {this.state.modalContent}
+                    </div>
                 </div>
             </div>
         );
