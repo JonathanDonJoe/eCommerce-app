@@ -35,7 +35,8 @@ class SignUp extends Component {
 
     submitSignup = (e) => {
         e.preventDefault();
-        console.log(this.state);
+        const userData = {...this.state}
+        this.props.signUpAction(userData);
     }
 
     render() {
