@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 
 function SignUp(props) {
@@ -11,7 +10,7 @@ function SignUp(props) {
             <input className="password-signup" placeholder="Password" />
             <button className="sign-up-button">Sign up</button>
             <div className="border-rule"></div>
-            <div onClick={() => {props.changeModalContent('login')}} className="login-text align-left">Already have an Airbnb account? <Link to="">Log in</Link></div>
+            <div onClick={() => {props.changeModalContent('login')}} className="login-text align-left">Already have an Airbnb account? <span onClick={() => {props.changeModalContent('login')}}>Log In</span></div>
         </div> 
     )
 }

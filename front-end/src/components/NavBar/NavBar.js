@@ -35,7 +35,7 @@ class NavBar extends Component {
         this.setState({
             showModal: true
         })
-        this.changeModalContent('signup');
+        this.changeModalContent();
     }
 
     login = (e) => {
