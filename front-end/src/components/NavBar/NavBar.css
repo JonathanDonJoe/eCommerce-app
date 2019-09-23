@@ -37,7 +37,7 @@
     right: 0;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20vh;
+    margin-top: 10vh;
     z-index: 100;
     box-sizing: border-box !important;
     padding: 32px !important;
@@ -211,4 +211,9 @@
     border-style: solid !important;
     background: rgb(255, 90, 95) !important;
     border-color: transparent !important;
+}
+
+.login-text span {
+    cursor: pointer;
+    color: blue;
 }

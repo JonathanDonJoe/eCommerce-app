@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 function ModalSplash(props) {
 
@@ -11,7 +10,7 @@ function ModalSplash(props) {
             <span>or</span>
             <button onClick={() => {props.changeModalContent('signup')}} className="center email-login">Sign up with email</button>
             <div className="border-rule"></div>
-            <div onClick={() => {props.changeModalContent('login')}} className="login-text align-left">Already have an Airbnb account? <Link to="">Log in</Link></div>
+            <div onClick={() => {props.changeModalContent('login')}} className="login-text align-left">Already have an Airbnb account? <span onClick={() => {props.changeModalContent('login')}}>Log In</span></div>
         </div>
     )
 }
