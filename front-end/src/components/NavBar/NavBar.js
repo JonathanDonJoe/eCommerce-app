@@ -5,6 +5,8 @@ import ModalSplash from './ModalSplash';
 import Login from './Login';
 import SignUp from './SignUp';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import logoutAction from '../../actions/logoutAction';
 
 class NavBar extends Component {
 
@@ -75,6 +77,7 @@ class NavBar extends Component {
             <li><Link to='/host/homes'>Host a Home</Link></li>
                 <li><Link to='/saved'>Saved</Link></li>
                 <li><Link to='/trips'>Trips</Link></li>
+                <li onClick={this.props.logout}>Logout</li>
                 <li><Link to='/account'>Welcome, {this.props.auth.first}</Link></li>
             </ul>
         }
@@ -111,8 +114,14 @@ function mapStateToProps(state) {
     })
 }
 
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        logout: logoutAction
+    }, dispatch)
+}
+
 // export default NavBar;
-export default connect(mapStateToProps, null)(NavBar);
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
 
 
 
