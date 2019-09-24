@@ -49,6 +49,7 @@ class SignUp extends Component {
         e.preventDefault();
         let formValid = true;
         let msg = '';
+        // eslint-disable-next-line no-unused-vars
         for (let key in this.state) {
             console.log(key)
             if ((this.state[key].length<1) && (key !== 'msg')){

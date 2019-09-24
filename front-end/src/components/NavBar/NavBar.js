@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import ModalSplash from './ModalSplash';
 import Login from './Login';
 import SignUp from './SignUp';
+import { connect } from 'react-redux';
 
 class NavBar extends Component {
 
@@ -53,26 +54,43 @@ class NavBar extends Component {
         })
     }
 
+    buildNavLinks = () => {
+        let navLinks = '';
+        if(!this.props.auth.token) {
+        navLinks = 
+            <ul id='nav-mobile' className='right'>
+            <li><Link to='/host/homes'>Host a Home</Link></li>
+                <li><Link to='/host/experience'>Host an Experience</Link></li>
+                <li><Link to='/help'>Help</Link></li>
+                <li className='nav-non-link' onClick={this.signUp}>
+                    Sign Up
+                </li>
+                <li className='nav-non-link' onClick={this.login}>
+                    Log In
+                </li>
+            </ul>
+        } else {
+            navLinks = 
+            <ul id='nav-mobile' className='right'>
+            <li><Link to='/host/homes'>Host a Home</Link></li>
+                <li><Link to='/saved'>Saved</Link></li>
+                <li><Link to='/trips'>Trips</Link></li>
+                <li><Link to='/account'>Welcome, {this.props.auth.first}</Link></li>
+            </ul>
+        }
+        return navLinks;
+    }
+
     render() { 
+
+        const navLinks = this.buildNavLinks()
         return (     
             <div className='container-fluid nav'>
                 <div className='row'>
                     <nav className='transparent'>
                         <div className='nav-wrapper'>
                             <Link to='/' className='left site-title'>AirBnB</Link>
-                            <ul id='nav-mobile' className='right'>
-                                <li><Link to='/host/homes'>Host a Home</Link></li>
-                                <li><Link to='/host/experience'>Host an Experience</Link></li>
-                                <li><Link to='/help'>Help</Link></li>
-                                <li className='nav-non-link' onClick={this.signUp}>
-                                    {/* <Link to='/sign-up'>Sign Up</Link> */}
-                                    Sign Up
-                                </li>
-                                <li className='nav-non-link' onClick={this.login}>
-                                    {/* <Link to='/log-in'>Log In</Link> */}
-                                    Log In
-                                </li>
-                            </ul>
+                            {navLinks}
                         </div>
                     </nav>
                 </div>
@@ -87,7 +105,14 @@ class NavBar extends Component {
     }
 }
  
-export default NavBar;
+function mapStateToProps(state) {
+    return ( {
+        auth: state.auth
+    })
+}
+
+// export default NavBar;
+export default connect(mapStateToProps, null)(NavBar);
 
 
 
