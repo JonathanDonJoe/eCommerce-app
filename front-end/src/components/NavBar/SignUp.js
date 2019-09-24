@@ -13,6 +13,17 @@ class SignUp extends Component {
         msg: ''
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        console.log('update')
+        if ((this.props.auth.msg === 'userExists') && (prevProps.auth.msg !== 'userExists')) {
+            this.setState( {
+                msg: 'This user already exists.  Please log in or create a new account'
+            })
+        } else if ((this.props.auth.msg === 'userAdded') && (prevProps.auth.msg !== 'userAdded')) {
+            this.props.closeModal();
+        }
+    }
+
     changeEmail = (e) => {
         this.setState( {
             email: e.target.value
@@ -58,9 +69,9 @@ class SignUp extends Component {
         if (formValid) {
             const userData = {...this.state}
             this.props.signUpAction(userData);
-            this.setState( {
-                msg: 'Successfully Signed Up'
-            })
+            // this.setState( {
+            //     msg: 'Successfully Signed Up'
+            // })
         } else {
             this.setState( {
                 msg
