@@ -84,7 +84,7 @@ class SignUp extends Component {
         // console.log(this.props.auth)
         return (
             <div className="register-form">
-                <p className='form-msg'>{this.state.msg}</p>
+                <p className='form-msg red-text'>{this.state.msg}</p>
                 <form onSubmit={this.submitSignup}>
                     <input onChange={this.changeEmail} className="email-signup" placeholder="Email address" required type='email' />
                     <input onChange={this.changeFirst} className="first-signup" placeholder="First name" required />

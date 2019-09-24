@@ -13,16 +13,18 @@ class Login extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if ((this.props.auth.msg === 'wrongEmail') && (prevProps.auth.msg !== 'wrongEmail')) {
-            this.setState( {
-                msg: 'Wrong Email'
-            })
-        } else if ((this.props.auth.msg === 'wrongPass') && (prevProps.auth.msg !== 'wrongPass')) {
-            this.setState( {
-                msg: 'Wrong Pass'
-            })
-        } else if ((this.props.auth.msg === 'loggedIn') && (prevProps.auth.msg !== 'loggedIn')) {
-            this.props.closeModal();
+        if ( prevProps.auth.msg !== this.props.auth.msg) {
+            if (this.props.auth.msg === 'wrongEmail') {
+                this.setState( {
+                    msg: 'Wrong Email'
+                })
+            } else if (this.props.auth.msg === 'wrongPass') {
+                this.setState( {
+                    msg: 'Wrong Pass'
+                })
+            } else if (this.props.auth.msg === 'loggedIn') {
+                this.props.closeModal();
+            }
         }
     }
 
@@ -47,7 +49,7 @@ class Login extends Component {
     render() {
         return (
             <div className="login-form">
-            <p className='form-msg'>{this.state.msg}</p>
+            <p className='form-msg red-text'>{this.state.msg}</p>
                 <form onSubmit={this.submitLogin}>
                     <button className="facebook-login">Connect With Facebook</button>
                     <button className="google-login">Connect with Google</button>
