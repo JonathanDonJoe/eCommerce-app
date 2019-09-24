@@ -11,6 +11,47 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+router.post('/login', function(req, res, next) {
+  const { email, pass } = req.body;
+  if ((!email) || (!pass)) {
+    res.json({
+      msg: 'invalidData'
+    })
+    return;
+  }
+
+  const checkUserQuery = `
+  SELECT * from users 
+  WHERE email = ?`
+  const token = randToken.uid(50)
+  
+  db.query(checkUserQuery, email, (err, results) => {
+    console.log(results)
+    if (err) {
+      throw err
+    } 
+    console.log(results.length)
+    if (!results.length) {
+      console.log('oops')
+      res.json( {
+        msg: 'wrongEmail'
+      })
+    } else if (bcrypt.compareSync(pass, results[0].pass)) {
+      res.json( {
+        msg: 'loggedIn', 
+        token
+      })
+    } else {
+      res.json( {
+        msg: 'wrongPass'
+      })
+    }
+  })
+
+  // console.log(req.body)
+  // res.json(req.body)
+})
+
 router.post('/signup', function(req, res, next) {
   const { first, last, email, pass } = req.body;
   if ((!first) || (!last) || (!email) || (!pass)) {
