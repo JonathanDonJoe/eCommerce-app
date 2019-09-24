@@ -14,7 +14,6 @@ class SignUp extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log('update')
         if ((this.props.auth.msg === 'userExists') && (prevProps.auth.msg !== 'userExists')) {
             this.setState( {
                 msg: 'This user already exists.  Please log in or create a new account'

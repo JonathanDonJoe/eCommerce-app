@@ -85,6 +85,7 @@ class NavBar extends Component {
     }
 
     render() { 
+        console.log(this.props.auth)
 
         const navLinks = this.buildNavLinks()
         return (     

@@ -45,7 +45,6 @@ class Login extends Component {
     }
 
     render() {
-        console.log(this.props.auth)
         return (
             <div className="login-form">
             <p className='form-msg'>{this.state.msg}</p>

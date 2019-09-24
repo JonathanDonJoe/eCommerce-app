@@ -21,9 +21,8 @@ router.post('/login', function(req, res, next) {
   }
 
   const checkUserQuery = `
-  SELECT * from users 
-  WHERE email = ?`
-  const token = randToken.uid(50)
+    SELECT * from users 
+    WHERE email = ?`
   
   db.query(checkUserQuery, email, (err, results) => {
     console.log(results)
@@ -37,8 +36,22 @@ router.post('/login', function(req, res, next) {
         msg: 'wrongEmail'
       })
     } else if (bcrypt.compareSync(pass, results[0].pass)) {
+
+      const token = randToken.uid(50)
+      const updateUserTokenQuery = `
+        UPDATE users
+        SET token = ?
+        WHERE email = ?`
+      db.query(updateUserTokenQuery, [token, email], (err2) => {
+        if (err2) {
+          throw err2
+        }
+      })
+
       res.json( {
         msg: 'loggedIn', 
+        email: results[0].email,
+        first: results[0].first,
         token
       })
     } else {
@@ -72,9 +85,9 @@ router.post('/signup', function(req, res, next) {
       })
     } else {
       const insertUserQuery = `
-      INSERT INTO users 
-      (first, last, email, pass, token)
-      VALUES (?, ?, ?, ?, ?)
+        INSERT INTO users 
+          (first, last, email, pass, token)
+        VALUES (?, ?, ?, ?, ?)
       `
        const salt = bcrypt.genSaltSync(10);
        const hash = bcrypt.hashSync(pass, salt);
