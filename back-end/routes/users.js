@@ -1,7 +1,10 @@
 var express = require('express');
-var router = express.Router();
-var db = require('../db');
 const bcrypt = require('bcrypt-nodejs');
+const randToken = require('rand-token');
+
+const db = require('../db');
+
+var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -29,18 +32,22 @@ router.post('/signup', function(req, res, next) {
     } else {
       const insertUserQuery = `
       INSERT INTO users 
-      (first, last, email, pass)
-      VALUES (?, ?, ?, ?)
+      (first, last, email, pass, token)
+      VALUES (?, ?, ?, ?, ?)
       `
        const salt = bcrypt.genSaltSync(10);
        const hash = bcrypt.hashSync(pass, salt);
+       const token = randToken.uid(50)
 
-      db.query(insertUserQuery, [first, last, email, hash], (err2) => {
+      db.query(insertUserQuery, [first, last, email, hash, token], (err2) => {
         if (err2) {
           throw err2
         }
         res.json( {
-          msg: 'userAdded'
+          msg: 'userAdded',
+          token,
+          email,
+          first
         })
       })
     }
