@@ -8,9 +8,12 @@ function LoginPage(props) {
         'display':'block', 
         'border':'solid 1px black'
     }
+
+    const pushUrl = localStorage.getItem('preLoginPage') ? localStorage.getItem('preLoginPage') : '/'
+
     return (
         <div className='login-modal' style={loginStyles}>
-            <Login closeModal={ () => {props.history.push('/host/homes')}} />
+            <Login closeModal={ () => {props.history.push(pushUrl)}} />
         </div>
     )
 }

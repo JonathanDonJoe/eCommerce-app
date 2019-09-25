@@ -56,12 +56,35 @@ class HostHome extends Component{
 
     onSubmit = (e) => {
         e.preventDefault();
-        console.log(this.props.auth)
-        this.props.hostHomeAction(this.state)
+        // console.log(this.props.auth)
+
+        const file = document.getElementById('location-image').files[0];
+        // const headerConfig = {
+        //     headers: {
+        //         'content-type': 'multipart/form-data'
+        //     }
+        // }
+        const data = new FormData()
+        data.append('locationImage', file);
+        // eslint-disable-next-line no-unused-vars
+        for (let key in this.state) {
+            data.append(key, this.state[key])
+
+        }
+        console.log(file);
+        data.append('token', this.props.auth.token);
+        this.props.hostHomeAction(data)
+
+
+        // const dataToSend = this.state
+        // dataToSend.token = this.props.auth.token
+        // console.log(dataToSend)
+        // this.props.hostHomeAction(dataToSend);
     }
 
     componentDidMount(){
         if (!this.props.auth.token) {
+            localStorage.setItem('preLoginPage', '/host/homes')
             this.props.history.push('/login')
         }
 
@@ -70,17 +93,17 @@ class HostHome extends Component{
         var instances = window.M.FormSelect.init(elems);
     }
     render(){
-        console.log(this.props)
+        // console.log(this.props)
         return(
             <div className="row host-home">
                 <form onSubmit={this.onSubmit} className="col s8 offset-s2">
                     <div className="row">
                         <div className="input-field col s6">
-                            <input onChange={this.changeTitle} id="title" type="text" className="validate" />
+                            <input value={this.state.title} onChange={this.changeTitle} id="title" type="text" className="validate" />
                             <label htmlFor="title">Title</label>
                         </div>
                         <div className="input-field col s6">
-                            <input onChange={this.changeLocation} id="location" type="text" className="validate" />
+                            <input value={this.state.location} onChange={this.changeLocation} id="location" type="text" className="validate" />
                             <label htmlFor="location">Location</label>
                         </div>
                     </div>
@@ -102,21 +125,21 @@ class HostHome extends Component{
                         </div>                    
                         <div className="input-field col s6">
                             <label htmlFor="price">Price/night</label>
-                            <input onChange={this.changePricePerNight} type='number' id="price" className="validate" />
+                            <input value={this.state.pricePerNight} onChange={this.changePricePerNight} type='number' id="price" className="validate" />
                         </div>
                     </div>
                 <div className="row">
                     <div className="col s12">
-                        <textarea onChange={this.changeDetails} id="details" className="materialize-textarea"></textarea>
+                        <textarea value={this.state.details} onChange={this.changeDetails} id="details" className="materialize-textarea"></textarea>
                         <label htmlFor="details">Details (be descriptive!)</label>
                     </div>
               </div>
               <div className="row">
                     <div className="input-field col s6">                            
-                        <input onChange={this.changeImage} type="file" />Upload image
+                        <input id='location-image' value={this.state.image} onChange={this.changeImage} type="file" />Upload image
                     </div>
                     <div className="input-field col s6">
-                        <input onChange={this.changeAmenities} id="amenities" type="text" className="validate" />
+                        <input value={this.state.amenities} onChange={this.changeAmenities} id="amenities" type="text" className="validate" />
                         <label htmlFor="amenities">Amenities</label>
                     </div>
                 </div>
