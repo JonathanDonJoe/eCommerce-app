@@ -5,6 +5,8 @@ export default (state = {}, action) => {
         return {};
     } else if (action.type === 'login') {
         return action.payload.data
+    } else if(action.type === 'aThunkAction') {
+        console.log('I got a thunk action')
     }
     return state;
 }
