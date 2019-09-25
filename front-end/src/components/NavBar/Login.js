@@ -50,10 +50,10 @@ class Login extends Component {
         return (
             <div className="login-form">
             <p className='form-msg red-text'>{this.state.msg}</p>
+                <button className="facebook-login">Connect With Facebook</button>
+                <button className="google-login">Connect with Google</button>
+                <span>or</span>
                 <form onSubmit={this.submitLogin}>
-                    <button className="facebook-login">Connect With Facebook</button>
-                    <button className="google-login">Connect with Google</button>
-                    <span>or</span>
                     <input onChange={this.changeEmail} type='email' className="email-signup" placeholder="Email address" required />
                     <input onChange={this.changePass} type='password' className="password-signup" placeholder="Password" required />
                     <button className="sign-up-button">Log In</button>

@@ -5,6 +5,7 @@ import './App.css';
 import NavBar from './components/NavBar/NavBar';
 import Home from './components/Home/Home';
 import HostHome from './components/Host/HostHome'
+import LoginPage from './components/LoginPage';
 
 function App() {
   	return (
@@ -13,6 +14,7 @@ function App() {
 				<Route path='/' component={NavBar} />
 				<Route exact path='/' component={Home} />
 				<Route path='/host/homes' component={HostHome} />
+				<Route exact path='/login' component={LoginPage} />
       		</div>
     	</Router>
   	)

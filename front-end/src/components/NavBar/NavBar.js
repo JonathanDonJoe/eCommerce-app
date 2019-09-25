@@ -7,7 +7,7 @@ import SignUp from './SignUp';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import logoutAction from '../../actions/logoutAction';
-import testThunkAction from '../../actions/thunkTest';
+// import testThunkAction from '../../actions/thunkTest';
 
 class NavBar extends Component {
 
@@ -17,7 +17,7 @@ class NavBar extends Component {
     }
 
     componentDidMount() {
-        this.props.aThunk();
+        // this.props.aThunk();
         this.setState( {
             modalContent: <ModalSplash changeModalContent={this.changeModalContent} />
         })
@@ -87,13 +87,16 @@ class NavBar extends Component {
     }
 
     render() { 
-        console.log(this.props.auth)
-
+        console.log(this.props)
+        let navColor = 'transparent';
+        if (this.props.location.pathname !== '/') {
+            navColor = 'black';
+        }
         const navLinks = this.buildNavLinks()
         return (     
             <div className='container-fluid nav'>
                 <div className='row'>
-                    <nav className='transparent'>
+                    <nav className={navColor}>
                         <div className='nav-wrapper'>
                             <Link to='/' className='left site-title'>AirBnB</Link>
                             {navLinks}
@@ -119,8 +122,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        logout: logoutAction,
-        aThunk: testThunkAction
+        logout: logoutAction
+        // ,
+        // aThunk: testThunkAction
     }, dispatch)
 }
 
