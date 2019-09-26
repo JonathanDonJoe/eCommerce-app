@@ -18,7 +18,7 @@ class NavBar extends Component {
 
     componentDidMount() {
         // this.props.aThunk();
-        this.setState( {
+        this.setState({
             modalContent: <ModalSplash changeModalContent={this.changeModalContent} />
         })
     }
@@ -26,11 +26,11 @@ class NavBar extends Component {
     changeModalContent = (newContent) => {
         let modalContent = <ModalSplash changeModalContent={this.changeModalContent} />
         if (newContent === 'login') {
-            modalContent= <Login changeModalContent={this.changeModalContent} closeModal={this.closeModal} />
+            modalContent = <Login changeModalContent={this.changeModalContent} closeModal={this.closeModal} />
         } else if (newContent === 'signup') {
-            modalContent= <SignUp changeModalContent={this.changeModalContent} closeModal={this.closeModal} />
+            modalContent = <SignUp changeModalContent={this.changeModalContent} closeModal={this.closeModal} />
         }
-        this.setState( {
+        this.setState({
             modalContent
         })
     }
@@ -50,7 +50,7 @@ class NavBar extends Component {
         })
         this.changeModalContent('login');
     }
-    
+
     closeModal = (e) => {
         document.querySelector('body').classList = '';
         this.setState({
@@ -60,40 +60,40 @@ class NavBar extends Component {
 
     buildNavLinks = () => {
         let navLinks = '';
-        if(!this.props.auth.token) {
-        navLinks = 
-            <ul id='nav-mobile' className='right'>
-            <li><Link to='/host/homes'>Host a Home</Link></li>
-                <li><Link to='/host/experience'>Host an Experience</Link></li>
-                <li><Link to='/help'>Help</Link></li>
-                <li className='nav-non-link' onClick={this.signUp}>
-                    Sign Up
+        if (!this.props.auth.token) {
+            navLinks =
+                <ul id='nav-mobile' className='right'>
+                    <li><Link to='/host/homes'>Host a Home</Link></li>
+                    <li><Link to='/host/experience'>Host an Experience</Link></li>
+                    <li><Link to='/help'>Help</Link></li>
+                    <li className='nav-non-link' onClick={this.signUp}>
+                        Sign Up
                 </li>
-                <li className='nav-non-link' onClick={this.login}>
-                    Log In
+                    <li className='nav-non-link' onClick={this.login}>
+                        Log In
                 </li>
-            </ul>
+                </ul>
         } else {
-            navLinks = 
-            <ul id='nav-mobile' className='right'>
-            <li><Link to='/host/homes'>Host a Home</Link></li>
-                <li><Link to='/saved'>Saved</Link></li>
-                <li><Link to='/trips'>Trips</Link></li>
-                <li onClick={this.props.logout}>Logout</li>
-                <li><Link to='/account'>Welcome, {this.props.auth.first}</Link></li>
-            </ul>
+            navLinks =
+                <ul id='nav-mobile' className='right'>
+                    <li><Link to='/host/homes'>Host a Home</Link></li>
+                    <li><Link to='/saved'>Saved</Link></li>
+                    <li><Link to='/trips'>Trips</Link></li>
+                    <li onClick={this.props.logout}>Logout</li>
+                    <li><Link to='/account'>Welcome, {this.props.auth.first}</Link></li>
+                </ul>
         }
         return navLinks;
     }
 
-    render() { 
+    render() {
         console.log(this.props)
         let navColor = 'transparent';
         if (this.props.location.pathname !== '/') {
             navColor = 'black';
         }
         const navLinks = this.buildNavLinks()
-        return (     
+        return (
             <div className='container-fluid nav'>
                 <div className='row'>
                     <nav className={navColor}>
@@ -103,7 +103,7 @@ class NavBar extends Component {
                         </div>
                     </nav>
                 </div>
-                <div className="login-modal" style={this.state.showModal ? {"display": "block"} : {}} >
+                <div className="login-modal" style={this.state.showModal ? { "display": "block" } : {}} >
                     <button id="close-modal" onClick={this.closeModal}>&Chi;</button>
                     <div className="modal-content">
                         {this.state.modalContent}
@@ -113,9 +113,9 @@ class NavBar extends Component {
         );
     }
 }
- 
+
 function mapStateToProps(state) {
-    return ( {
+    return ({
         auth: state.auth
     })
 }
