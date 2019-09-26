@@ -1,21 +1,49 @@
 import React, { Component } from 'react';
-import './Home.css'
-import SearchBox from './SearchBox'
+import './Home.css';
+import SearchBox from './SearchBox';
+import Venue from '../utility/Venue';
+import axios from 'axios';
 
 class Home extends Component {
-    render() { 
+
+    state = {
+        cities: []
+    }
+
+    componentDidMount() {
+        const recommendedCities = axios.get(`${window.apiHost}/cities`)
+        recommendedCities.then( resp => {
+            const cities = resp.data;
+            this.setState( {
+                cities: cities
+            })
+        })
+
+    }
+
+    render() {
+
         return (
-            <div className='container-fluid'>
-                <div className='row'>
-                    <div className='home col s12'>
-                        <div className='upper-fold'>
-                            <SearchBox />
+            <>
+                <div className='container-fluid'>
+                    <div className='row'>
+                        <div className='home col s12'>
+                            <div className='upper-fold'>
+                                <SearchBox />
+                            </div>
+                        </div>
+                        <div className='container'>
+                            <div className='row'>
+                                <div className='venue col s12'>
+                                    <Venue cities={this.state.cities}/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </>
         );
     }
 }
- 
+
 export default Home;
