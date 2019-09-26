@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import BaseCard from './BaseCard';
+import Slick from './Slick';
 
 function Venue(props) {
      
@@ -14,7 +15,7 @@ function Venue(props) {
         
     return (
         <div>
-            {baseCards}
+            <Slick elements={baseCards} />
         </div>
     );
 }
