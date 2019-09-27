@@ -136,7 +136,7 @@ class HostHome extends Component{
               </div>
               <div className="row">
                     <div className="input-field col s6">                            
-                        <input id='location-image' value={this.state.image} onChange={this.changeImage} type="file" />Upload image
+                        <input id='location-image' onChange={this.changeImage} type="file" required />Upload image
                     </div>
                     <div className="input-field col s6">
                         <input value={this.state.amenities} onChange={this.changeAmenities} id="amenities" type="text" className="validate" />

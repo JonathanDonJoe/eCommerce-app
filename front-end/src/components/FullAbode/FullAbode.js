@@ -37,6 +37,10 @@ class FullAbode extends Component {
                 <div className="amenities">
                     Amenities: {abode.amenities}
                 </div>
+                {/* <div className='col s4'>
+                    <input onChange={this.changeDate1} value={this.state.date1} type='date'/>
+                    <input onChange={this.changeDate2} value={this.state.date2} type='date'/>
+                </div> */}
             </div>
         );
     }
