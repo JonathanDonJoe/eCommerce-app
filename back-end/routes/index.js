@@ -7,18 +7,19 @@ const multer = require('multer');
 const upload = multer( { dest: './public/images/' });
 
 router.post('*', upload.single('locationImage'), (req, res, next) => {
-    console.log('req.body.token')
-    console.log(req.body.token)
-    const token = req.body.token
+    console.log('index token')
+    const token = req.body.token ? req.body.token : 1;
+    console.log(token)
     const getUserIdQuery = `SELECT id FROM users WHERE token = ?`;
+
+
     db.query(getUserIdQuery, token, (err, results) => {
         console.log('index query')
         console.log(results)
-        console.log(results[0].id)
         if (err) {
             throw err
         }
-        if (results === 0) {
+        if (!results || results.length === 0) {
             res.locals.loggedIn = false;
         } else {
             console.log('runs')
@@ -29,11 +30,32 @@ router.post('*', upload.single('locationImage'), (req, res, next) => {
         }
         next();
     })
-    // .then((res4) => {
-    //     next()
-    // })
+
 })
 
+router.get('/abodes', (req, res, next) => {
+    const abodesQuery = `
+        SELECT * FROM homes
+        ORDER BY RAND()
+        LIMIT 9`
+    db.query(abodesQuery, (err, results) => {
+        if (err) {
+            throw err
+        }
+        res.json(results);
+    })
+})
+
+router.get('/abode/:abodeId', (req, res) => {
+    const abodeId = req.params.abodeId;
+    const getAbodeQuery = `SELECT * FROM homes where id = ?`
+
+    db.query(getAbodeQuery, abodeId, (err, results) => {
+        if (err) throw err;
+        res.json(results[0])
+    })
+
+})
 
 
 

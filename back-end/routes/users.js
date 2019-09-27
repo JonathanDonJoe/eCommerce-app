@@ -12,6 +12,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/login', function (req, res, next) {
+    console.log('logging in')
     const { email, pass } = req.body;
     if ((!email) || (!pass)) {
         res.json({
