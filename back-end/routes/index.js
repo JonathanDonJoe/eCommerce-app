@@ -57,6 +57,11 @@ router.get('/abode/:abodeId', (req, res) => {
 
 })
 
+router.post('/payment/stripe', (req, res) => {
+    console.log(req.body);
+    res.json(req.body)
+})
+
 
 
 /* GET home page. */
