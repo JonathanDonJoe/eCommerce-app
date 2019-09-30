@@ -1,45 +1,38 @@
 import React, { Component } from 'react';
 import './FullAbode.css';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import moment from 'moment';
 
-class FullAbode extends Component {
+class FullAbode extends Component{
     state = {
-        cities: [],
-        abode: []
+        abode: {},
+        date1: "",
+        date2: "",
+        datesMsg: "",
+        daysDiff: 0
     }
 
-    async componentDidMount() {
-        console.log(this.props)
-        const abodeId = this.props.match.params.abodeId
-        console.log(abodeId)
-
-        const url = `${window.apiHost}/abode/${abodeId}`
-        const axiosResponse = await axios.get(url);
-        console.log(axiosResponse)
-        this.setState({
-            abode: axiosResponse.data
-        })
-    }
-
-    
-    
-    makePayment = () => {
+    makePayment = ()=>{
+        if(!this.props.auth.token){
+            this.props.history.push('/login');
+        }
         const pKey = 'pk_test_j8n4wEt1UK4RG2El9AOwDUq800MdbgIqj5'
-
-        const amount = this.state.abode.price_per_night
-        // const amount = document.getElementById('payment-amount').value;
+        const numNights = 1;
+        const amount = this.state.abode.price_per_night * numNights;
         var handler = window.StripeCheckout.configure({
             key: pKey,
             locale: 'auto',
-            // image: `${window.apiHost}${this.props.abode.image_url}`,
-            image: ``,
+            image: `${window.apiHost}${this.state.abode.image_url}`,
             token: (token) => {
                 console.log(token);
                 console.log(this.props.auth.token);
                 var theData = {
                     amount: Math.floor(amount * 100),
                     stripeToken: token.id,
-                    userToken: this.props.auth.token,
+                    token: this.props.auth.token,
+                    email: this.props.auth.email,
+                    abodeId: this.props.match.params.abodeId
                 }
                 axios({
                     method: 'POST',
@@ -67,30 +60,128 @@ class FullAbode extends Component {
         })
     }
 
-    render() {
+    async componentDidMount(){
+        const abodeId = this.props.match.params.abodeId;
+        // console.log(abodeId);
+        const url = `${window.apiHost}/abode/${abodeId}`
+        const axiosResponse = await axios.get(url)
+        // console.log(axiosResponse.data);
+        this.setState({
+            abode: axiosResponse.data
+        })
+        var elems = document.querySelectorAll('select');
+        // eslint-disable-next-line no-unused-vars
+        var instances = window.M.FormSelect.init(elems);
+
+    }
+
+    changeDate1 = (e)=>{
+        const date1 = this.state.date1;
+        const date2 = this.state.date2;
+        const date1M = moment(date1);
+        const date2M = moment(date2);
+
+        if(moment(e.target.value) > moment(date2)){
+            this.setState({
+                datesMsg: "Check in date must be before checkout date."
+            })
+        }else if((date1)&&(date2)){
+            const daysDiff = date1M.diff(date2, 'days');
+            console.log(daysDiff)
+            this.setState({
+                date1:e.target.value,
+                daysDiff
+            })
+        }
+        this.setState({date1:e.target.value})
+    }
+    changeDate2 = (e)=>{
+        const date1 = this.state.date1;
+        const date2 = this.state.date2;
+        const date1M = moment(date1);
+        const date2M = moment(date2);
+        if(moment(e.target.value) < moment(date1)){
+            this.setState({
+                datesMsg: "Check in date must be before checkout date."
+            })
+        }else if((date1)&&(date2)){
+            const daysDiff = date1M.diff(date2, 'days');
+            console.log(daysDiff)
+            this.setState({
+                date1:e.target.value,
+                daysDiff
+            })
+        }
+
+
+        this.setState({date2:e.target.value})
+    }
+
+    render(){
         const abode = this.state.abode;
-        console.log(abode)
-        return (
-            <div className='fullAbode col s12'>
-                <img src={`${window.apiHost}${abode.image_url}`} alt=''></img>
-                <div className="location">{abode.location}</div>
-                <div className="title">{abode.title}</div>
-                <div className="price">${abode.price_per_night} per night!</div>
-                <div className="guests">Number of Guests: {abode.guests}</div>
-                <div className="details">
-                    Details: {abode.details}
+        let button;
+        if(this.props.auth.token){
+            button = <button onClick={this.makePayment} className="btn">Reserve 1 night</button>
+        }else{
+            button = <button onClick={()=>{this.props.history.push('/login')}}className="btn">Please login to reserve</button>
+        }
+        
+        console.log(abode);
+        return(
+            <div className="row fullAbode">
+                <div className="col s12">
+                    <img src={`${window.apiHost}${abode.image_url}`} alt='' />
                 </div>
-                <div className="amenities">
-                    Amenities: {abode.amenities}
+                <div className="col s8 location-details offset-s2">
+                    <div className="col s8 left-details">
+                        <div className="location">{abode.location}</div>
+                        <div className="title">{abode.title}</div>
+                        <div className="guests">{abode.guests} guests </div>
+                        
+                        <div className="divider"></div>
+                        
+                        <div className="details">{abode.details}</div>
+                        <div className="amenties">{abode.amenities}</div>
+                    </div>
+                    <div className="col s4 right-details">
+                        <div className="dates-msg red-text">{this.state.datesMsg}</div>
+                        <div className="price-per-day">$ {abode.price_per_night} <span>per day</span></div>
+                        <div className="col s6">
+                            Check In
+                            <input onChange={this.changeDate1} value={this.state.date1} type="date" />
+                        </div>
+                        <div className="col s6">
+                            Check Out
+                            <input onChange={this.changeDate2} value={this.state.date2} type="date" />
+                        </div>
+
+                        <div className="input-field col s12">
+                            <select value={this.state.guests} onChange={this.changeGuests} >
+                                <option value="" disabled>Choose your option</option>
+                                <option value="1">1 Guest</option>
+                                <option value="2">2 Guests</option>
+                                <option value="3">3 Guests</option>
+                                <option value="4">4 Guests</option>
+                                <option value="5">5 Guests</option>
+                                <option value="6">6 Guests</option>
+                                <option value="7">7 Guests</option>
+                                <option value="8">8 Guests</option>
+                                <option value="9">9 Guests</option>
+                            </select>
+                            <label># of guests</label>
+                        </div>             
+                        {button}
+                    </div>
                 </div>
-                {/* <div className='col s4'>
-                    <input onChange={this.changeDate1} value={this.state.date1} type='date'/>
-                    <input onChange={this.changeDate2} value={this.state.date2} type='date'/>
-                </div> */}
-                <button onClick={this.makePayment} className='btn'>Reserve 1 Night</button>
             </div>
-        );
+        )
     }
 }
 
-export default FullAbode;
+function mapStateToProps(state){
+    return{
+        auth: state.auth
+    }
+}
+
+export default connect(mapStateToProps)(FullAbode);

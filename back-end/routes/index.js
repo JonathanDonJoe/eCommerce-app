@@ -5,6 +5,8 @@ const db = require('../db');
 
 const multer = require('multer');
 const upload = multer( { dest: './public/images/' });
+const config = require('../config');
+var stripe = require('stripe')(config.stripe)
 
 router.post('*', upload.single('locationImage'), (req, res, next) => {
     // console.log('index token')
@@ -59,7 +61,36 @@ router.get('/abode/:abodeId', (req, res) => {
 
 router.post('/payment/stripe', (req, res) => {
     console.log(req.body);
-    res.json(req.body)
+    // res.json(req.body)
+    if(!res.locals.loggedIn) {
+        res.json({
+            msg:'badToken'
+        })
+        return;
+    }
+    const { stripeToken, amount, email, abodeId } = req.body;
+    stripe.charges.create({
+        amount,
+        currency: 'usd',
+        source: stripeToken,
+        description: `Charges for ${email}`
+    }, (err, charge) => {
+        if (err) {
+            res.json({
+                msg: 'errorProcessing'
+            });
+        } else {
+            const insertReservationQuery = `
+                INSERT INTO reservation 
+                    (uid, hid, paid)
+                VALUES
+                    (?, ?, ?)`
+            db.query( insertReservationQuery, [res.locals.uid, abodeId, 1]);
+            res.json({
+                msg:'paymentSuccess'
+            })
+        }
+    })
 })
 
 
