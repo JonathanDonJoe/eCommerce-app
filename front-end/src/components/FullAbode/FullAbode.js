@@ -18,7 +18,7 @@ class FullAbode extends Component{
             this.props.history.push('/login');
         }
         const pKey = 'pk_test_j8n4wEt1UK4RG2El9AOwDUq800MdbgIqj5'
-        const numNights = 1;
+        const numNights = this.state.daysDiff;
         const amount = this.state.abode.price_per_night * numNights;
         var handler = window.StripeCheckout.configure({
             key: pKey,
@@ -76,45 +76,52 @@ class FullAbode extends Component{
     }
 
     changeDate1 = (e)=>{
+        console.log(e.target.value)
+        this.setState({date1:e.target.value}, (event) => {
         const date1 = this.state.date1;
         const date2 = this.state.date2;
         const date1M = moment(date1);
         const date2M = moment(date2);
-
-        if(moment(e.target.value) > moment(date2)){
+        console.log(date1M)
+        console.log(date2M)
+        if(moment(date1) > moment(date2)){
             this.setState({
                 datesMsg: "Check in date must be before checkout date."
             })
         }else if((date1)&&(date2)){
-            const daysDiff = date1M.diff(date2, 'days');
+            const daysDiff = -date1M.diff(date2M, 'days');
             console.log(daysDiff)
             this.setState({
-                date1:e.target.value,
                 daysDiff
             })
         }
-        this.setState({date1:e.target.value})
+    })
     }
     changeDate2 = (e)=>{
+        this.setState({date2:e.target.value}, (event) => {
         const date1 = this.state.date1;
         const date2 = this.state.date2;
         const date1M = moment(date1);
         const date2M = moment(date2);
-        if(moment(e.target.value) < moment(date1)){
+        console.log('changed date 2')
+        // console.log(date1)
+        console.log(date1M)
+        console.log(date2M)
+        console.log(date1 && date2)
+
+        if(moment(date2) < moment(date1)){
             this.setState({
                 datesMsg: "Check in date must be before checkout date."
             })
         }else if((date1)&&(date2)){
-            const daysDiff = date1M.diff(date2, 'days');
+            const daysDiff = -date1M.diff(date2M, 'days');
             console.log(daysDiff)
             this.setState({
-                date1:e.target.value,
                 daysDiff
             })
         }
+    })
 
-
-        this.setState({date2:e.target.value})
     }
 
     render(){
@@ -133,17 +140,18 @@ class FullAbode extends Component{
                     <img src={`${window.apiHost}${abode.image_url}`} alt='' />
                 </div>
                 <div className="col s8 location-details offset-s2">
-                    <div className="col s8 left-details">
+                    <div className="col s6 left-details">
                         <div className="location">{abode.location}</div>
                         <div className="title">{abode.title}</div>
-                        <div className="guests">{abode.guests} guests </div>
+                        <div className="guests">Up to {abode.guests} guests </div>
                         
                         <div className="divider"></div>
                         
                         <div className="details">{abode.details}</div>
+                        <br/>
                         <div className="amenties">{abode.amenities}</div>
                     </div>
-                    <div className="col s4 right-details">
+                    <div className="col s6 right-details">
                         <div className="dates-msg red-text">{this.state.datesMsg}</div>
                         <div className="price-per-day">$ {abode.price_per_night} <span>per day</span></div>
                         <div className="col s6">
