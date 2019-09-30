@@ -15,7 +15,18 @@ class HostHome extends Component{
         pricePerNight: 0,
         details: '',
         image: '',
-        amenities: ''
+        amenities: '',
+        msg: ''
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.home.msg !== this.props.home.msg) {
+            if (this.props.home.msg === 'homeAdded') {
+                this.setState({
+                    msg: 'Home Added'
+                })
+            }
+        }
     }
 
     changeTitle = (e) => {
@@ -96,6 +107,7 @@ class HostHome extends Component{
         // console.log(this.props)
         return(
             <div className="row host-home">
+                <p className='form-msg red-text'>{this.state.msg}</p>
                 <form onSubmit={this.onSubmit} className="col s8 offset-s2">
                     <div className="row">
                         <div className="input-field col s6">
